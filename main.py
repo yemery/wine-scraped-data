@@ -1,16 +1,16 @@
-import resource
-# from flask import Flask
-# from flask_restful import Api,Resource
-import json
-# app=Flask(__name__)
+from flask import Flask
+from flask_restful import Api,Resource
+from scraper import *
+# print(myfun)
+app=Flask(__name__)
+api=Api(app)
 
-# api=Api(app)
-# if __name__=='__main__':
-#     app.run(debug=True)
-# class getInfo(Resource):
-#     def get(self,gr):
-#         return
-f=open('data.json')
-data=json.load(f)
-for i in data['101']:
-    print(i)
+@app.route('/')
+def getdata():
+    myfun=csv_into_json()
+    return json.dumps(myfun,indent=4)
+
+
+
+if __name__=='__main__':
+    app.run(debug=True)

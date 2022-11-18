@@ -38,7 +38,7 @@ def get_wine_info():
         # print(title)
         price=desc.find('span',{"class": "product-price"}).text
         finalPrice=price[1:]
-        print(finalPrice)
+        # print(finalPrice)
         itemInfo=desc.find('div', {"id": "item-info"})
         ulInfo=desc.find('ul')
         # # print(itemInfo.prettify())
@@ -72,6 +72,7 @@ def get_wine_info():
 
 # get_wine_info()
 
+#test new thgs
 def scraped_data_into_csv():
     products=get_wine_info()
     # print(products)
@@ -93,6 +94,11 @@ def csv_into_json():
             data.append(rows)
     with open('products_data.json','w',encoding='utf-8') as jsonf:
         jsonf.write(json.dumps(data,indent=4))
+    # print(data)
+    # for i in data:
+    #     print(i)
+    return  data
+
     
     
 
