@@ -6,10 +6,8 @@ import time
 import requests
 import csv
 from termcolor import colored
-# wf=open('Urls/Url.txt',"r+")
-# lines=wf.readlines()
-# for i in lines:
-#     print(i.rstrip())
+import json
+
 
 def get_wine_links():
     urlLinks=[]
@@ -39,7 +37,8 @@ def get_wine_info():
         title=desc.find('h1').text
         # print(title)
         price=desc.find('span',{"class": "product-price"}).text
-        # print(price)
+        finalPrice=price[1:]
+        print(finalPrice)
         itemInfo=desc.find('div', {"id": "item-info"})
         ulInfo=desc.find('ul')
         # # print(itemInfo.prettify())
@@ -60,7 +59,7 @@ def get_wine_info():
         description=soup.find("div",{"class": "meta--text"}).text.strip()
         # print(description)
         keys=['id','image','title','price','type','grape','country','region','abv','bottlesize']
-        values=[i,srcImg,title,price,type,grape,country,region,abv,bottleSize]
+        values=[i,srcImg,title,finalPrice,type,grape,country,region,abv,bottleSize]
         # print([1,srcImg,title,price,type,grape,country,region,abv,bottleSize])
         product={}
         for k in range(0,len(keys)):
@@ -71,10 +70,12 @@ def get_wine_info():
     # print(products)
     return products
 
+# get_wine_info()
+
 def scraped_data_into_csv():
     products=get_wine_info()
     # print(products)
-    with open("data.csv", 'w',encoding="utf-8") as csvfile: 
+    with open("products_data.csv", 'w',encoding="utf-8") as csvfile: 
         writer = csv.DictWriter(csvfile, fieldnames =['id','image','title','price','type','grape','country','region','abv','bottlesize'] ) 
 
         writer.writeheader() 
@@ -83,17 +84,26 @@ def scraped_data_into_csv():
         writer.writerows(products) 
         print(colored("added secc...\n",'blue'))
 
+
+def csv_into_json():
+    data=[]
+    with open('products_data.csv',encoding='utf-8') as csvf:
+        csvreader=csv.DictReader(csvf)
+        for rows in csvreader:
+            data.append(rows)
+    with open('products_data.json','w',encoding='utf-8') as jsonf:
+        jsonf.write(json.dumps(data,indent=4))
+    
     
 
-scraped_data_into_csv()
+# scraped_data_into_csv()
+# csv_into_json()
 
-# if __name__ == "__main__":
-#     start_time = time.time()
-#     print(colored("Start...\n",'blue'))
 
-#     scraped_data_into_csv()
-#     print(colored("\nDone :)","blue"))
-#     print(colored("--- %s seconds ---"%(time.time() - start_time),"yellow"))
+
+
+
+
 
 
 
